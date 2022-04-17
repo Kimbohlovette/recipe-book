@@ -1,0 +1,23 @@
+<div class="py-2 w-full">
+  <form class="flex flex-col gap-4">
+    <fieldset class="flex-grow">
+      <label for="name">Name</label>
+      <input type="text"
+      class="w-full border px-4 py-2 focus:outline-none rounded-sm"
+      #nameInput>
+    </fieldset>
+    <fieldset class="">
+      <label for="amount">Amount</label>
+      <input 
+      type="number" 
+      class="block border px-4 py-2 w-full focus:outline-none rounded-sm"
+      #amountInput>
+    </fieldset>
+  </form>
+  <div class="flex flex-row gap-3 my-4">
+    <button class="bg-green-500 px-4 py-2 text-white rounded-sm"
+    (click)="onAddItem()">Add</button>
+    <button class="bg-blue-500 px-4 py-2 text-white rounded-sm">Edit</button>
+    <button class="bg-red-500 px-4 py-2 text-white rounded-sm">Delete</button>
+  </div>
+</div>

@@ -1,0 +1,7 @@
+<div class="w-full">
+  <div class="w-full py-2">
+    <button class="bg-blue-500 text-white px-4 py-2 rounded-sm">New Recipe</button>
+  </div>
+  <hr class="my-5">
+  <app-recipe-item *ngFor="let rcp of recipes" [recipeItem]="rcp"></app-recipe-item>
+</div>
