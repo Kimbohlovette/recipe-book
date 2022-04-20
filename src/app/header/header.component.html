@@ -5,8 +5,8 @@
   </div>
   <div class="flex-grow flex flex-row justify-between items-center"> 
       <ul class="flex flex-row justify-evenly font-normal text-md">
-          <li class="hover:text-gray-300 px-2 text-white"><a href="#" (click)="onSelect('shopping-list')">Shopping list</a></li>
-          <li class="hover:text-gray-300 px-2 text-white"><a href="#" (click)="onSelect('recipe')">Recipes</a></li>
+          <li class="hover:text-gray-300 px-2 text-white"><a routerLink="shopping-list" routerLinkActive="text-gray-400">Shopping list</a></li>
+          <li class="hover:text-gray-300 px-2 text-white"><a routerLink="/recipes" routerLinkActive="text-gray-400">Recipes</a></li>
       </ul>
       <div appDropdown>
          <div class="text-white px-4 cursor-pointer">Manage Recipe

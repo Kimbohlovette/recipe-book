@@ -3,8 +3,7 @@
       <app-recipe-list></app-recipe-list>
   </div>
   <div class="w-full static md:w-1/2">
-      <app-recipe-detail *ngIf="selectedRecipe;else selectRecipeInfo"
-      [recipe]="selectedRecipe"></app-recipe-detail>
+     <router-outlet></router-outlet>
   </div>
   <ng-template #selectRecipeInfo>
     <p  class="text-center font-bold my-10"> Recipe details appear here!</p>
