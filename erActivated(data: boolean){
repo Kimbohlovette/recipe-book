@@ -1,0 +1,373 @@
+[1mdiff --git a/src/app/app-routing.module.ts b/src/app/app-routing.module.ts[m
+[1mnew file mode 100644[m
+[1mindex 0000000..e831298[m
+[1m--- /dev/null[m
+[1m+++ b/src/app/app-routing.module.ts[m
+[36m@@ -0,0 +1,30 @@[m
+[32m+[m[32mimport { NgModule } from '@angular/core';[m
+[32m+[m[32mimport { CommonModule } from '@angular/common';[m
+[32m+[m[32mimport { RouterModule, Routes } from '@angular/router';[m
+[32m+[m[32mimport { RecipesComponent } from './recipes/recipes.component';[m
+[32m+[m[32mimport { ShoppingListComponent } from './shopping-list/shopping-list.component';[m
+[32m+[m[32mimport { RecipeDetailComponent } from './recipes/recipe-detail/recipe-detail.component';[m
+[32m+[m[32mimport { ResipeStartComponent } from './recipes/resipe-start/resipe-start.component';[m
+[32m+[m[32mimport { RecipeEditComponent } from './recipe-edit/recipe-edit.component';[m
+[32m+[m
+[32m+[m
+[32m+[m[32mconst appRoutes: Routes = [[m
+[32m+[m[32m  {path: '', redirectTo: '/recipes', pathMatch: 'full'},[m
+[32m+[m[32m  {path: 'recipes', component: RecipesComponent,children: [[m
+[32m+[m[32m    {path: '', component: ResipeStartComponent},[m
+[32m+[m[32m    {path: 'new', component: RecipeEditComponent},[m
+[32m+[m[32m    {path: ':id', component: RecipeDetailComponent},[m
+[32m+[m[32m    {path: ':id/edit', component: RecipeEditComponent}[m
+[32m+[m
+[32m+[m[32m]},[m
+[32m+[m[32m  {path: 'shopping-list', component: ShoppingListComponent},[m
+[32m+[m[32m][m
+[32m+[m[32m@NgModule({[m
+[32m+[m[32m  declarations: [],[m
+[32m+[m[32m  imports: [[m
+[32m+[m[32m    CommonModule,[m
+[32m+[m[32m    RouterModule.forRoot(appRoutes)[m
+[32m+[m[32m  ],[m
+[32m+[m[32m  exports: [RouterModule][m
+[32m+[m[32m})[m
+[32m+[m[32mexport class AppRoutingModule { }[m
+[1mdiff --git a/src/app/app.component.html b/src/app/app.component.html[m
+[1mindex ebf91f4..54bf27f 100644[m
+[1m--- a/src/app/app.component.html[m
+[1m+++ b/src/app/app.component.html[m
+[36m@@ -2,7 +2,6 @@[m
+   <app-header (featureSelected)="onNavigate($event)"></app-header>[m
+ </div>[m
+ <div class="px-5">[m
+[31m-  <app-recipes *ngIf="loadedFeature === 'recipe'"></app-recipes>[m
+[31m-  <app-shopping-list *ngIf="loadedFeature !== 'recipe'"></app-shopping-list>[m
+[32m+[m[32m  <router-outlet></router-outlet>[m
+ </div>[m
+ [m
+[1mdiff --git a/src/app/app.module.ts b/src/app/app.module.ts[m
+[1mindex d84db23..aee3076 100644[m
+[1m--- a/src/app/app.module.ts[m
+[1m+++ b/src/app/app.module.ts[m
+[36m@@ -13,6 +13,9 @@[m [mimport { ShoppingListComponent } from './shopping-list/shopping-list.component';[m
+ import { ShoppingEditComponent } from './shopping-list/shopping-edit/shopping-edit.component';[m
+ import { DropdownDirective } from './shared/dropdown.directive';[m
+ import { ShoppingListService } from './shopping-list/shopping-list.service';[m
+[32m+[m[32mimport { AppRoutingModule } from './app-routing.module';[m
+[32m+[m[32mimport { ResipeStartComponent } from './recipes/resipe-start/resipe-start.component';[m
+[32m+[m[32mimport { RecipeEditComponent } from './recipe-edit/recipe-edit.component';[m
+ [m
+ @NgModule({[m
+   declarations: [[m
+[36m@@ -24,11 +27,14 @@[m [mimport { ShoppingListService } from './shopping-list/shopping-list.service';[m
+     RecipeItemComponent,[m
+     ShoppingListComponent,[m
+     ShoppingEditComponent,[m
+[31m-    DropdownDirective[m
+[32m+[m[32m    DropdownDirective,[m
+[32m+[m[32m    ResipeStartComponent,[m
+[32m+[m[32m    RecipeEditComponent[m
+   ],[m
+   imports: [[m
+     BrowserModule,[m
+     FormsModule,[m
+[32m+[m[32m    AppRoutingModule,[m
+   ],[m
+   providers: [ShoppingListService],[m
+   bootstrap: [AppComponent][m
+[1mdiff --git a/src/app/header/header.component.html b/src/app/header/header.component.html[m
+[1mindex d8b46fc..db9a05c 100644[m
+[1m--- a/src/app/header/header.component.html[m
+[1m+++ b/src/app/header/header.component.html[m
+[36m@@ -5,8 +5,8 @@[m
+   </div>[m
+   <div class="flex-grow flex flex-row justify-between items-center"> [m
+       <ul class="flex flex-row justify-evenly font-normal text-md">[m
+[31m-          <li class="hover:text-gray-300 px-2 text-white"><a href="#" (click)="onSelect('shopping-list')">Shopping list</a></li>[m
+[31m-          <li class="hover:text-gray-300 px-2 text-white"><a href="#" (click)="onSelect('recipe')">Recipes</a></li>[m
+[32m+[m[32m          <li class="hover:text-gray-300 px-2 text-white"><a routerLink="shopping-list" routerLinkActive="text-gray-400">Shopping list</a></li>[m
+[32m+[m[32m          <li class="hover:text-gray-300 px-2 text-white"><a routerLink="/recipes" routerLinkActive="text-gray-400">Recipes</a></li>[m
+       </ul>[m
+       <div appDropdown>[m
+          <div class="text-white px-4 cursor-pointer">Manage Recipe[m
+[1mdiff --git a/src/app/recipe-edit/recipe-edit.component.css b/src/app/recipe-edit/recipe-edit.component.css[m
+[1mnew file mode 100644[m
+[1mindex 0000000..e69de29[m
+[1mdiff --git a/src/app/recipe-edit/recipe-edit.component.html b/src/app/recipe-edit/recipe-edit.component.html[m
+[1mnew file mode 100644[m
+[1mindex 0000000..ea957b3[m
+[1m--- /dev/null[m
+[1m+++ b/src/app/recipe-edit/recipe-edit.component.html[m
+[36m@@ -0,0 +1 @@[m
+[32m+[m[32m<p>recipe-edit works!</p>[m
+[1mdiff --git a/src/app/recipe-edit/recipe-edit.component.ts b/src/app/recipe-edit/recipe-edit.component.ts[m
+[1mnew file mode 100644[m
+[1mindex 0000000..d72f217[m
+[1m--- /dev/null[m
+[1m+++ b/src/app/recipe-edit/recipe-edit.component.ts[m
+[36m@@ -0,0 +1,24 @@[m
+[32m+[m[32mimport { Component, OnInit } from '@angular/core';[m
+[32m+[m[32mimport { ActivatedRoute, Params } from '@angular/router';[m
+[32m+[m
+[32m+[m[32m@Component({[m
+[32m+[m[32m  selector: 'app-recipe-edit',[m
+[32m+[m[32m  templateUrl: './recipe-edit.component.html',[m
+[32m+[m[32m  styleUrls: ['./recipe-edit.component.css'][m
+[32m+[m[32m})[m
+[32m+[m[32mexport class RecipeEditComponent implements OnInit {[m
+[32m+[m[32m  id!: number[m
+[32m+[m[32m  editMode: boolean = false[m
+[32m+[m[32m  constructor(private route: ActivatedRoute) { }[m
+[32m+[m
+[32m+[m[32m  ngOnInit(): void {[m
+[32m+[m[32m    this.route.params.subscribe([m
+[32m+[m[32m      (params: Params)=>{[m
+[32m+[m[32m        this.id = params['id'][m
+[32m+[m[32m        this.editMode = params['id'] != null[m
+[32m+[m[32m        console.log(this.editMode)[m
+[32m+[m[32m      }[m
+[32m+[m[32m    )[m
+[32m+[m[32m  }[m
+[32m+[m
+[32m+[m[32m}[m
+[1mdiff --git a/src/app/recipes/recipe-detail/recipe-detail.component.html b/src/app/recipes/recipe-detail/recipe-detail.component.html[m
+[1mindex 512eb79..96fa793 100644[m
+[1m--- a/src/app/recipes/recipe-detail/recipe-detail.component.html[m
+[1m+++ b/src/app/recipes/recipe-detail/recipe-detail.component.html[m
+[36m@@ -1,11 +1,15 @@[m
+[31m-[m
+[31m-[m
+ <div class="">[m
+[31m-  <div class="flex flex-col w-full md:p shrink-0">[m
+[31m-      <img [src]="recipe.imagePath" [alt]="recipe.name" class="max-h-80 w-full object-cover rounded-lg">[m
+[31m-      <h1 class="text-xl font-bold">{{recipe.name}}</h1>[m
+[32m+[m[32m  <div class="flex flex-col w-full my-2">[m
+[32m+[m[32m      <img [src]="recipe.imagePath" [alt]="recipe.name" class="max-h-80 w-full object-scale-down aspect-square rounded-lg">[m
+[32m+[m[32m      <h1 class="text-sm font-semibold pt-2">{{recipe.name}}</h1>[m
+[32m+[m[32m      <div class="w-full">[m
+[32m+[m[32m        <p class="text-slate-500 text-sm py-2">[m
+[32m+[m[32m          {{recipe.description}}[m
+[32m+[m[32m        </p>[m
+[32m+[m[32m      </div>[m
+   </div>[m
+[31m-  <div class="my-5" appDropdown>[m
+[32m+[m[32m  <div class="flex gap-4 items-center">[m
+[32m+[m[32m    <div class="my-5" appDropdown>[m
+       <button class="bg-blue-500 text-white text-sm px-4 py-2 rounded-sm">Manage Recipe[m
+           <span class="inline-block">[m
+               <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" style="vertical-align: -0.125em;" width="1em" height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 1024 1024"><path fill="currentColor" d="M840.4 300H183.6c-19.7 0-30.7 20.8-18.5 35l328.4 380.8c9.4 10.9 27.5 10.9 37 0L858.9 335c12.2-14.2 1.2-35-18.5-35z"/></svg>[m
+[36m@@ -14,21 +18,18 @@[m
+       <ul class="absolute hidden bg-white max-w-fit border">[m
+           <li class="px-5 py-2 text-sm cursor-pointer hover:bg-gray-100"[m
+           (click)="onAddToShoppingList()">To Shopping List</li>[m
+[31m-          <li class="px-5 py-2 text-sm cursor-pointer hover:bg-gray-100">Edit Recipe</li>[m
+[32m+[m[32m          <li[m[41m [m
+[32m+[m[32m          class="px-5 py-2 text-sm cursor-pointer hover:bg-gray-100"[m
+[32m+[m[32m          (click)="onEditRecipe()">Edit Recipe</li>[m
+           <li class="px-5 py-2 text-sm cursor-pointer hover:bg-gray-100">Delete Recipe</li>[m
+       </ul>[m
+   </div>[m
+[31m-  <div class="w-full">[m
+[31m-    <p class="text-slate-500">[m
+[31m-      {{recipe.description}}[m
+[31m-    </p>[m
+[31m-  </div>[m
+[31m-  <div>[m
+[31m-    <ul>[m
+[31m-      <li class="border px-4 py-2 rounded-sm"[m
+[31m-      *ngFor="let ingredient of recipe.ingredients"[m
+[31m-      >{{ingredient.name}}({{ingredient.amount}})</li>[m
+[31m-    </ul>[m
+[31m-  </div>[m
+[32m+[m[32m  <ul class="flex flex-row gap-2">[m
+[32m+[m[32m    <li class="border px-4 py-2 rounded-full h-fit text-sm italic"[m
+[32m+[m[32m    *ngFor="let ingredient of recipe.ingredients"[m
+[32m+[m[32m    >{{ingredient.name}}({{ingredient.amount}})</li>[m
+[32m+[m[32m  </ul>[m
+   [m
+[31m-</div>[m
+\ No newline at end of file[m
+[32m+[m[32m</div>[m
+[32m+[m[32m  </div>[m
+[41m+  [m
+\ No newline at end of file[m
+[1mdiff --git a/src/app/recipes/recipe-detail/recipe-detail.component.ts b/src/app/recipes/recipe-detail/recipe-detail.component.ts[m
+[1mindex 0c24996..01ef3ab 100644[m
+[1m--- a/src/app/recipes/recipe-detail/recipe-detail.component.ts[m
+[1m+++ b/src/app/recipes/recipe-detail/recipe-detail.component.ts[m
+[36m@@ -1,4 +1,5 @@[m
+ import { Component, OnInit, Input } from '@angular/core';[m
+[32m+[m[32mimport { ActivatedRoute, Params, Router } from '@angular/router';[m
+ [m
+ import { Recipe } from '../recipe.model';[m
+ import { RecipeService } from '../recipe.service';[m
+[36m@@ -9,16 +10,27 @@[m [mimport { RecipeService } from '../recipe.service';[m
+   styleUrls: ['./recipe-detail.component.css'][m
+ })[m
+ export class RecipeDetailComponent implements OnInit {[m
+[31m-  @Input()[m
+[31m-  recipe!: Recipe;[m
+ [m
+[31m-  constructor(private recipeService: RecipeService) { }[m
+[32m+[m[32m  recipe!: Recipe[m
+[32m+[m[32m  id!: number[m
+[32m+[m
+[32m+[m[32m  constructor(private recipeService: RecipeService, private router: Router, private route: ActivatedRoute) { }[m
+ [m
+   ngOnInit() {[m
+[32m+[m[32m    this.route.params.subscribe([m
+[32m+[m[32m      (params: Params)=>{[m
+[32m+[m[32m        this.id = +params['id'][m
+[32m+[m[32m        this.recipe = this.recipeService.getRecipe(this.id)[m
+[32m+[m[32m      }[m
+[32m+[m[32m    )[m
+   }[m
+ [m
+   onAddToShoppingList() {[m
+     this.recipeService.addIngredientsToShoppingList(this.recipe.ingredients);[m
+   }[m
+ [m
+[32m+[m[32m  onEditRecipe(){[m
+[32m+[m[32m    this.router.navigate(['edit'], {relativeTo: this.route})[m
+[32m+[m[32m  }[m
+[32m+[m
+ }[m
+[1mdiff --git a/src/app/recipes/recipe-list/recipe-item/recipe-item.component.html b/src/app/recipes/recipe-list/recipe-item/recipe-item.component.html[m
+[1mindex 9dea734..6c5bd57 100644[m
+[1m--- a/src/app/recipes/recipe-list/recipe-item/recipe-item.component.html[m
+[1m+++ b/src/app/recipes/recipe-list/recipe-item/recipe-item.component.html[m
+[36m@@ -1,10 +1,12 @@[m
+[31m-<a href="#"[m
+[32m+[m[32m<a[m
+[32m+[m[32m[routerLink]="[index]"[m
+[32m+[m[32mrouterLinkActive="bg-gray-500"[m
+ (click)="onSelected()">[m
+   <div class="my-2 flex flex-row justify-between items-center min-w- border">[m
+     <div class="py-2 px-4">[m
+       <h4 class="font-bold text-lg">{{recipe.name}}</h4>[m
+       <p class="text-sm font-normal text-slate-700">{{recipe.description}}</p>[m
+     </div>[m
+[31m-    <img [src]="recipe.imagePath" alt="" class="border w-16 h-16 rounded-full mx-4 my-2">[m
+[32m+[m[32m    <img [src]="recipe.imagePath" alt="" class="border w-16 h-16 rounded-sm aspect-square mx-4 my-2">[m
+   </div>[m
+ </a>[m
+[1mdiff --git a/src/app/recipes/recipe-list/recipe-item/recipe-item.component.ts b/src/app/recipes/recipe-list/recipe-item/recipe-item.component.ts[m
+[1mindex e8476c3..e6f96ef 100644[m
+[1m--- a/src/app/recipes/recipe-list/recipe-item/recipe-item.component.ts[m
+[1m+++ b/src/app/recipes/recipe-list/recipe-item/recipe-item.component.ts[m
+[36m@@ -11,10 +11,13 @@[m [mimport { RecipeService } from '../../recipe.service';[m
+ export class RecipeItemComponent implements OnInit {[m
+   @Input('recipeItem')[m
+   recipe!: Recipe;[m
+[32m+[m[32m  index!: number[m
+ [m
+   constructor(private recipeService: RecipeService) { }[m
+ [m
+   ngOnInit() {[m
+[32m+[m[32m    this.index = +this.recipeService.getRecipes().indexOf(this.recipe)[m
+[32m+[m
+   }[m
+ [m
+   onSelected() {[m
+[1mdiff --git a/src/app/recipes/recipe-list/recipe-list.component.html b/src/app/recipes/recipe-list/recipe-list.component.html[m
+[1mindex 29488b6..8880310 100644[m
+[1m--- a/src/app/recipes/recipe-list/recipe-list.component.html[m
+[1m+++ b/src/app/recipes/recipe-list/recipe-list.component.html[m
+[36m@@ -1,6 +1,8 @@[m
+ <div class="w-full">[m
+   <div class="w-full py-2">[m
+[31m-    <button class="bg-blue-500 text-white px-4 py-2 rounded-sm">New Recipe</button>[m
+[32m+[m[32m    <button[m[41m [m
+[32m+[m[32m    class="bg-blue-500 text-white px-4 py-2 rounded-sm"[m
+[32m+[m[32m    (click)="onNewRecipe()">New Recipe</button>[m
+   </div>[m
+   <hr class="my-5">[m
+   <app-recipe-item *ngFor="let rcp of recipes" [recipeItem]="rcp"></app-recipe-item>[m
+[1mdiff --git a/src/app/recipes/recipe-list/recipe-list.component.ts b/src/app/recipes/recipe-list/recipe-list.component.ts[m
+[1mindex 39916f5..ae4b002 100644[m
+[1m--- a/src/app/recipes/recipe-list/recipe-list.component.ts[m
+[1m+++ b/src/app/recipes/recipe-list/recipe-list.component.ts[m
+[36m@@ -1,4 +1,5 @@[m
+ import { Component, OnInit } from '@angular/core';[m
+[32m+[m[32mimport { Router, ActivatedRoute } from '@angular/router';[m
+ [m
+ import { Recipe } from '../recipe.model';[m
+ import { RecipeService } from '../recipe.service';[m
+[36m@@ -11,10 +12,14 @@[m [mimport { RecipeService } from '../recipe.service';[m
+ export class RecipeListComponent implements OnInit {[m
+   recipes!: Recipe[];[m
+ [m
+[31m-  constructor(private recipeService: RecipeService) {[m
+[32m+[m[32m  constructor(private recipeService: RecipeService, private router: Router, private route: ActivatedRoute) {[m
+   }[m
+ [m
+   ngOnInit() {[m
+     this.recipes = this.recipeService.getRecipes();[m
+   }[m
+[32m+[m
+[32m+[m[32m  onNewRecipe(){[m
+[32m+[m[32m    this.router.navigate(['new'],{relativeTo: this.route})[m
+[32m+[m[32m  }[m
+ }[m
+[1mdiff --git a/src/app/recipes/recipe.service.ts b/src/app/recipes/recipe.service.ts[m
+[1mindex fc13523..a9ba150 100644[m
+[1m--- a/src/app/recipes/recipe.service.ts[m
+[1m+++ b/src/app/recipes/recipe.service.ts[m
+[36m@@ -32,6 +32,10 @@[m [mexport class RecipeService {[m
+     return this.recipes.slice();[m
+   }[m
+ [m
+[32m+[m[32m  getRecipe(index: number){[m
+[32m+[m[32m    return this.recipes[index][m
+[32m+[m[32m  }[m
+[32m+[m
+   addIngredientsToShoppingList(ingredients: Ingredient[]) {[m
+     this.slService.addIngredients(ingredients);[m
+   }[m
+[1mdiff --git a/src/app/recipes/recipes.component.html b/src/app/recipes/recipes.component.html[m
+[1mindex 745cbd8..ec1e07b 100644[m
+[1m--- a/src/app/recipes/recipes.component.html[m
+[1m+++ b/src/app/recipes/recipes.component.html[m
+[36m@@ -3,8 +3,7 @@[m
+       <app-recipe-list></app-recipe-list>[m
+   </div>[m
+   <div class="w-full static md:w-1/2">[m
+[31m-      <app-recipe-detail *ngIf="selectedRecipe;else selectRecipeInfo"[m
+[31m-      [recipe]="selectedRecipe"></app-recipe-detail>[m
+[32m+[m[32m     <router-outlet></router-outlet>[m
+   </div>[m
+   <ng-template #selectRecipeInfo>[m
+     <p  class="text-center font-bold my-10"> Recipe details appear here!</p>[m
+[1mdiff --git a/src/app/recipes/resipe-start/resipe-start.component.css b/src/app/recipes/resipe-start/resipe-start.component.css[m
+[1mnew file mode 100644[m
+[1mindex 0000000..e69de29[m
+[1mdiff --git a/src/app/recipes/resipe-start/resipe-start.component.html b/src/app/recipes/resipe-start/resipe-start.component.html[m
+[1mnew file mode 100644[m
+[1mindex 0000000..7539e86[m
+[1m--- /dev/null[m
+[1m+++ b/src/app/recipes/resipe-start/resipe-start.component.html[m
+[36m@@ -0,0 +1 @@[m
+[32m+[m[32m<h1 class="font-bold">Please select a Recipe!</h1>[m
+[1mdiff --git a/src/app/recipes/resipe-start/resipe-start.component.ts b/src/app/recipes/resipe-start/resipe-start.component.ts[m
+[1mnew file mode 100644[m
+[1mindex 0000000..996b08b[m
+[1m--- /dev/null[m
+[1m+++ b/src/app/recipes/resipe-start/resipe-start.component.ts[m
+[36m@@ -0,0 +1,15 @@[m
+[32m+[m[32mimport { Component, OnInit } from '@angular/core';[m
+[32m+[m
+[32m+[m[32m@Component({[m
+[32m+[m[32m  selector: 'app-resipe-start',[m
+[32m+[m[32m  templateUrl: './resipe-start.component.html',[m
+[32m+[m[32m  styleUrls: ['./resipe-start.component.css'][m
+[32m+[m[32m})[m
+[32m+[m[32mexport class ResipeStartComponent implements OnInit {[m
+[32m+[m
+[32m+[m[32m  constructor() { }[m
+[32m+[m
+[32m+[m[32m  ngOnInit(): void {[m
+[32m+[m[32m  }[m
+[32m+[m
+[32m+[m[32m}[m
