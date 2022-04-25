@@ -1,1 +1,59 @@
-<p>recipe-edit works!</p>
+<div>
+  <form (ngSubmit)="onSubmit()" [formGroup]="recipeEditForm">
+    <div class="my-2">
+      <button class="mr-2 py-2 px-4 bg-blue-500 text-white font-bold rounded-sm disabled:bg-blue-200"
+      [disabled]="!recipeEditForm.valid">Save</button>
+      <button type="button" class="py-2 mx-2 px-4 bg-red-500 text-white font-bold rounded-sm" (click)="onCancel()">Cancel</button>
+    </div>
+    <div class="">
+      <div class="my-2">
+        <label for="name" class="text-black font-normal">Name</label>
+        <input 
+          type="text" 
+          id="name" 
+          class="border w-full p-2 focus:outline-none text-sm rounded-sm"
+          formControlName="name">
+      </div>
+      <div class="my-2">
+        <label for="ImagePath" class="text-black font-normal">Imgage URL</label>
+        <input 
+          type="url" 
+          id="imagePath" 
+          class="border w-full p-2 focus:outline-none text-sm rounded-sm"
+          formControlName="imagePath">
+      </div>
+      <div class="border my-5 rounded-sm">
+        <img [src]="recipeEditForm.value.imagePath" class=" object-scale-down">
+      </div>
+      <div class="my-2"> 
+        <label for="description" class="text-black font-normal">Description</label>
+        <textarea 
+          name="description" 
+          id="description" 
+          rows="6" 
+          class="border w-full p-2 focus:outline-none text-sm rounded-sm"
+          formControlName="description"></textarea>
+      </div>
+    </div>
+    <div formArrayName="ingredients">
+      <div *ngFor="let ingredientCtrs of controls; let i=index">
+        <div class="flex flex-row gap-4 my-2" [formGroupName]="i">
+          <input 
+            type="text"
+            class="border w-1/2 p-2 focus:outline-none text-sm rounded-sm placeholder:italic"
+            formControlName="name"
+            >
+          <input 
+            type="number" 
+            class="border w-1/4 p-2 focus:outline-none text-sm rounded-sm placeholder:italic caret-blue-400" 
+            formControlName="amount"
+            >
+            <button 
+              type="button" 
+              class="bg-red-500 py-1 px-4 font-bold text-gray-100 rounded-sm " (click)="onDeleteIngredient(i)">x</button>
+        </div>
+      </div>
+      <button type="button" class="bg-blue-400 px-4 py-2 text-white text-sm rounded-sm my-2" (click)="onAddIngredient()">Add Ingredient</button>
+    </div>
+  </form>
+</div>

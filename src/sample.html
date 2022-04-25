@@ -1,0 +1,27 @@
+
+
+<div [ngFormGroup]="myForm">
+  <div formArrayName="mycontrols" *ngFor="let control of controls; let i=index">
+    <div [formGroupName]="i">
+      <input type="text" formControlName="name">
+      <input type="email" formControlName="email">
+    </div>
+  </div>
+</div>
+
+
+<script>
+  //inside your component initialize the controls with a getter function like this
+  myForm!: FormGroup;
+  controls!: FormArray;
+  ngOnInit(){
+    this.controls = this.getControls();
+    /* Some other logic*/
+  }
+
+  // implement the getControls() method 
+  getControls(){
+    return (this.myForm.get('controls') as FormArray).controls
+  }
+
+</script>

@@ -5,9 +5,12 @@ import { Ingredient } from '../shared/ingredient.model';
 import { ShoppingListService } from '../shopping-list/shopping-list.service';
 import { Subject } from 'rxjs';
 
-@Injectable()
+@Injectable(
+  {providedIn: 'root'}
+)
 export class RecipeService {
-  recipeSelected = new Subject<Recipe>();
+  recipeSelected: Subject<Recipe> = new Subject();
+  recipesChanged: Subject<Recipe[]> = new Subject()
 
   private recipes: Recipe[] = [
     new Recipe(
@@ -24,7 +27,15 @@ export class RecipeService {
       [
         new Ingredient('Buns', 2),
         new Ingredient('Meat', 1)
-      ])
+      ]),
+    new Recipe('Endomi Sea Food', 'Some sweet Endomie sea food with matah', 'https://www.indomie.com/uploads/recipe/indomie-seafood-with-sambal-matah_detail1_093852985.png',[
+      new Ingredient('Crayfish', 3),
+      new Ingredient('Egg', 3),
+      new Ingredient('Endomi', 2),
+      new Ingredient('Onion', 1),
+      new Ingredient('Lemon', 3),
+      new Ingredient('Pepper', 5)
+    ])
   ];
 
   constructor(private slService: ShoppingListService) {}
@@ -37,7 +48,23 @@ export class RecipeService {
     return this.recipes[index]
   }
 
+  addRecipe(recipe: Recipe){
+    this.recipes.push(recipe);
+    this.recipesChanged.next(this.recipes.slice())
+  }
+
+  updateRecipe(index: number, recipe: Recipe){
+    this.recipes[index]= recipe;
+    this.recipesChanged.next(this.recipes.slice())
+  }
+
+  deleteRecipe(index: number){
+    this.recipes.splice(index, 1)
+    this.recipesChanged.next(this.recipes.slice())
+  }
+
   addIngredientsToShoppingList(ingredients: Ingredient[]) {
     this.slService.addIngredients(ingredients);
   }
+
 }

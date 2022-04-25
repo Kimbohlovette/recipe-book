@@ -23,6 +23,11 @@ export class RecipeDetailComponent implements OnInit {
         this.recipe = this.recipeService.getRecipe(this.id)
       }
     )
+    this.recipeService.recipesChanged.subscribe(
+      (recipes: Recipe[])=>{
+        this.recipe = recipes[this.id]
+      }
+    )
   }
 
   onAddToShoppingList() {
@@ -31,6 +36,11 @@ export class RecipeDetailComponent implements OnInit {
 
   onEditRecipe(){
     this.router.navigate(['edit'], {relativeTo: this.route})
+  }
+
+  onDelete(){
+    this.recipeService.deleteRecipe(this.id)
+    this.router.navigate(['../../'],{relativeTo: this.route})
   }
 
 }

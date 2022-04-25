@@ -1,23 +1,36 @@
 <div class="py-2 w-full">
-  <form class="flex flex-col gap-4">
-    <fieldset class="flex-grow">
-      <label for="name">Name</label>
-      <input type="text"
-      class="w-full border px-4 py-2 focus:outline-none rounded-sm"
-      #nameInput>
-    </fieldset>
-    <fieldset class="">
-      <label for="amount">Amount</label>
-      <input 
-      type="number" 
-      class="block border px-4 py-2 w-full focus:outline-none rounded-sm"
-      #amountInput>
-    </fieldset>
+  <form (ngSubmit)="onAddItem(f)"  #f="ngForm">
+    <div class="flex flex-col gap-4">
+      <fieldset class="flex-grow">
+        <label for="name">Name</label>
+        <input type="text"
+        class="w-full border px-4 py-2 focus:outline-none rounded-sm"
+        name="name"
+        ngModel
+        required>
+      </fieldset>
+      <fieldset class="">
+        <label for="amount">Amount</label>
+        <input 
+        type="number" 
+        class="block border px-4 py-2 w-full focus:outline-none rounded-sm"
+        name="amount"
+        ngModel
+        required
+        pattern="^[1-9]+[0-9]*$"
+        >
+      </fieldset>
+      
+      <div class="flex flex-row gap-3 my-4">
+        <button 
+          type="submit"
+          class="bg-green-500 font-semibold px-4 py-2 text-white rounded-sm"
+          [disabled]="!f.valid">{{editMode?'Update': 'Add'}}</button>
+        <button type="button" (click)="onDelete()" class="bg-red-500 px-4 py-2 text-white font-semibold rounded-sm" [disabled]="!editMode">Delete</button>
+        <button type="button" (click)="onClearForm()" class="bg-blue-500 font-semibold px-4 py-2 text-white rounded-sm">Clear</button>
+      </div>
+      
+    </div>
   </form>
-  <div class="flex flex-row gap-3 my-4">
-    <button class="bg-green-500 px-4 py-2 text-white rounded-sm"
-    (click)="onAddItem()">Add</button>
-    <button class="bg-blue-500 px-4 py-2 text-white rounded-sm">Edit</button>
-    <button class="bg-red-500 px-4 py-2 text-white rounded-sm">Delete</button>
-  </div>
+ 
 </div>

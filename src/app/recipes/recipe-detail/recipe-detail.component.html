@@ -1,6 +1,6 @@
 <div class="">
   <div class="flex flex-col w-full my-2">
-      <img [src]="recipe.imagePath" [alt]="recipe.name" class="max-h-80 w-full object-scale-down aspect-square rounded-lg">
+      <img [src]="recipe?.imagePath" [alt]="recipe.name" class="max-h-80 w-full object-scale-down aspect-square rounded-lg">
       <h1 class="text-sm font-semibold pt-2">{{recipe.name}}</h1>
       <div class="w-full">
         <p class="text-slate-500 text-sm py-2">
@@ -21,7 +21,7 @@
           <li 
           class="px-5 py-2 text-sm cursor-pointer hover:bg-gray-100"
           (click)="onEditRecipe()">Edit Recipe</li>
-          <li class="px-5 py-2 text-sm cursor-pointer hover:bg-gray-100">Delete Recipe</li>
+          <li class="px-5 py-2 text-sm cursor-pointer hover:bg-gray-100" (click)="onDelete()">Delete Recipe</li>
       </ul>
   </div>
   <ul class="flex flex-row gap-2">
