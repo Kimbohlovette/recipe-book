@@ -3,22 +3,27 @@
   <div class="text-2xl font-semibold px-5 text-white">
       <a href="#"> RecipeBook</a>
   </div>
-  <div class="flex-grow flex flex-row justify-between items-center"> 
-      <ul class="flex flex-row justify-evenly font-normal text-md">
+  <div class="flex-grow flex flex-row justify-between items-center text-sm"> 
+      <ul class="flex flex-row justify-evenly text-md">
           <li class="hover:text-gray-300 px-2 text-white"><a routerLink="shopping-list" routerLinkActive="text-gray-400">Shopping list</a></li>
-          <li class="hover:text-gray-300 px-2 text-white"><a routerLink="/recipes" routerLinkActive="text-gray-400">Recipes</a></li>
+          <li class="hover:text-gray-300 px-2 text-white"><a routerLink="auth" routerLinkActive="text-gray-400" *ngIf="!isAuthenticated">Authenticate</a></li>
+          <li class="hover:text-gray-300 px-2 text-white"><a routerLink="/recipes" routerLinkActive="text-gray-400" *ngIf="isAuthenticated">Recipes</a></li>
       </ul>
-      <div appDropdown>
-         <div class="text-white px-4 cursor-pointer">Manage Recipe
-            <span class="inline-block">
-                <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" style="vertical-align: -0.125em;" width="1em" height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 1024 1024"><path fill="currentColor" d="M840.4 300H183.6c-19.7 0-30.7 20.8-18.5 35l328.4 380.8c9.4 10.9 27.5 10.9 37 0L858.9 335c12.2-14.2 1.2-35-18.5-35z"/></svg>
-            </span>
-          </div>
-          <ul class="hidden absolute bg-white mt-1 max-w-fit shadow-gray-500   shadow-sm rounded-sm border">
-            <li class="px-5 py-2 cursor-pointer hover:bg-gray-100 text-sm">Save Data</li>
-            <li class="px-5 py-2 cursor-pointer hover:bg-gray-100 text-sm">Fetch Data</li>
-          </ul> 
+      <div class="flex flex-row gap-2">
+        <a *ngIf="isAuthenticated" class="text-white text-sm font-bold cursor-pointer">Logout</a>
+        <div appDropdown>
+          <div class="text-white px-4 cursor-pointer text-sm" *ngIf="isAuthenticated">Manage
+             <span class="inline-block">
+                 <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" style="vertical-align: -0.125em;" width="1em" height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 1024 1024"><path fill="currentColor" d="M840.4 300H183.6c-19.7 0-30.7 20.8-18.5 35l328.4 380.8c9.4 10.9 27.5 10.9 37 0L858.9 335c12.2-14.2 1.2-35-18.5-35z"/></svg>
+             </span>
+           </div>
+           <ul class="hidden absolute bg-white mt-1 max-w-fit shadow-gray-500   shadow-sm rounded-sm border">
+             <li class="px-5 py-2 cursor-pointer hover:bg-gray-100 text-sm" (click)="onSaveData()">Save Data</li>
+             <li class="px-5 py-2 cursor-pointer hover:bg-gray-100 text-sm" (click)="onFetchData()">Fetch Data</li>
+           </ul> 
+       </div>
       </div>
+      
       
   </div>
   
