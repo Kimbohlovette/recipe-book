@@ -3,6 +3,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { catchError,throwError, BehaviorSubject } from 'rxjs';
 import { User } from "./user.model";
 import { tap } from 'rxjs/operators';
+import { Router } from '@angular/router';
 
 export interface AuthResponseData {
   kind: string,
@@ -17,9 +18,10 @@ export interface AuthResponseData {
 
 @Injectable({ providedIn: 'root'})
 export class AuthService {
-  constructor(private http: HttpClient){}
+  constructor(private http: HttpClient, private router: Router){}
 
   user = new BehaviorSubject<User | null>(null);
+  tokenExpirationTimer!: any;
 
   signup(email: string, password: string){
     return this.http.post<AuthResponseData>('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyCKs8shXZjgiWausbLnTmjkDEPgVG61V3k',
@@ -52,6 +54,44 @@ export class AuthService {
     }))
   }
 
+  autoLogin(){
+    const userData = localStorage.getItem('userData');
+    if(!userData){
+      return
+    }
+    const userSnapShot: {
+      email: string,
+      id: string,
+      _token: string,
+      _tokenExpiration: string
+    } = JSON.parse(userData);
+    const loadedData = new User(userSnapShot.email, userSnapShot.id, userSnapShot._token, new Date(userSnapShot._tokenExpiration));
+    
+    if(loadedData.token){
+      const tokenExpirationDuration = new Date(userSnapShot._tokenExpiration).getTime()-new Date().getTime();
+      this.user.next(loadedData);
+      this.autoLogout(tokenExpirationDuration);
+    }
+
+
+  }
+
+  logout(){
+    this.user.next(null);
+    localStorage.removeItem('userData');
+    this.router.navigate(['/auth']);
+    if(this.tokenExpirationTimer){
+      clearTimeout(this.tokenExpirationTimer);
+    }
+    this.tokenExpirationTimer = null;
+  }
+
+  autoLogout(expirationTime: number){
+   this.tokenExpirationTimer = setTimeout(()=>{
+      this.logout();
+    },expirationTime)
+  }
+  
   private handleError(errorRes: HttpErrorResponse){
     let errorMessage = 'An unkown error occured!'
     if(!errorRes.error || !errorRes.error.error){
@@ -86,5 +126,7 @@ export class AuthService {
       token,
       expirationDate);
     this.user.next(user);
+    this.autoLogout(+expiresIn*1000)
+    localStorage.setItem('userData', JSON.stringify(user))
   }
 }

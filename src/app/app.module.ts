@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 
 import { AppComponent } from './app.component';
@@ -19,6 +19,7 @@ import { ResipeStartComponent } from './recipes/resipe-start/resipe-start.compon
 import { RecipeEditComponent } from './recipe-edit/recipe-edit.component';
 import { AuthComponent } from './auth/auth.component';
 import { LoadingSpinnerComponent } from './shared/loading-spinner/loading-spinner.component';
+import { AuthInterceptor } from './auth/auth-interceptor.service';
 
 @NgModule({
   declarations: [
@@ -44,7 +45,7 @@ import { LoadingSpinnerComponent } from './shared/loading-spinner/loading-spinne
     AppRoutingModule,
     
   ],
-  providers: [ShoppingListService],
+  providers: [ShoppingListService, {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true}],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

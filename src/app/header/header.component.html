@@ -10,7 +10,7 @@
           <li class="hover:text-gray-300 px-2 text-white"><a routerLink="/recipes" routerLinkActive="text-gray-400" *ngIf="isAuthenticated">Recipes</a></li>
       </ul>
       <div class="flex flex-row gap-2">
-        <a *ngIf="isAuthenticated" class="text-white text-sm font-bold cursor-pointer">Logout</a>
+        <a *ngIf="isAuthenticated" class="text-white text-sm font-bold cursor-pointer hover:text-gray-300" (click)="onLockout()">Logout</a>
         <div appDropdown>
           <div class="text-white px-4 cursor-pointer text-sm" *ngIf="isAuthenticated">Manage
              <span class="inline-block">

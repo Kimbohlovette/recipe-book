@@ -20,14 +20,8 @@ export class DataStorageService {
   }
 
   fetchRecipes(){
-      return this.authService.user.pipe(
-        take(1),
-        exhaustMap(user=>{
-          return this.http.get<Recipe[]>('https://recipe-book-db-60812-default-rtdb.firebaseio.com/recipes.json',{
-            params: new HttpParams().set('auth',String(user?.token))
-          })
-        }),
-        map(
+    return this.http.get<Recipe[]>('https://recipe-book-db-60812-default-rtdb.firebaseio.com/recipes.json').pipe(
+      map(
         recipes =>{
           return recipes.map(
             recipe =>{
