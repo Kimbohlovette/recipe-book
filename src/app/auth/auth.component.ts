@@ -50,11 +50,20 @@ export class AuthComponent implements OnInit {
       },
       error: (message) => {
         this.errorMessage = message;
+        this.showError(this.errorMessage);
         this.isLoading = false;
       }
      });
 
   form.reset()
+
+  }
+
+  onHandleError(){
+    this.errorMessage = '';
+  }
+
+  private showError(errorMessage: string){
 
   }
 }

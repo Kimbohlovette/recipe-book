@@ -1,13 +1,18 @@
 <div class="w-full sm:w-5/6 md:w-3/4 lg:w-2/3 mx-auto">
-  <div *ngIf="errorMessage" class="w-full bg-red-50 text-red-500 shadow-sm shadow-red-300 py-5 px-4 rounded-sm">
+  <!-- <div *ngIf="errorMessage" class="w-full bg-red-50 text-red-500 shadow-sm shadow-red-300 py-5 px-4 rounded-sm">
     <p>{{errorMessage}}</p>
-  </div> 
+  </div>  -->
+
+  <div>
+    <app-alert [message]="errorMessage" (close)="onHandleError()"></app-alert>
+  </div>
+  <ng-template appPlaceholder></ng-template>
   <form (ngSubmit)="onSubmit(authForm)" #authForm="ngForm" *ngIf="!isLoading">
     <div class="my-5">
       <label for="email">Email</label>
-      <input 
-      type="email" 
-      name="email" 
+      <input
+      type="email"
+      name="email"
       id="email"
       class="w-full border border-gray-400 py-2 px-2 focus:outline-none rounded-sm"
       ngModel
@@ -15,9 +20,9 @@
     </div>
     <div class="my-5">
       <label for="password">Password</label>
-      <input 
-      type="password" 
-      name="password" 
+      <input
+      type="password"
+      name="password"
       id="password"
       class="w-full border border-gray-400 py-2 px-2 focus:outline-none rounded-sm"
       ngModel
@@ -26,13 +31,13 @@
     </div>
     <div class="my-5">
       <button
-      type="submit" 
+      type="submit"
         class="bg-blue-600 px-4 py-2 rounded-sm text-white text-sm font-semibold cursor-pointer disabled:bg-blue-300 disabled:cursor-not-allowed"
-        [disabled]="!authForm.valid"> 
+        [disabled]="!authForm.valid">
         {{isLoginMode?'Login':'Signup'}}
       </button>
       <div *ngIf="isLoginMode" class="my-5">
-        <p>Don't have an account yet? <span class="text-green-500 underline cursor-pointer" (click)="onSwitchMode()">Signup</span></p> 
+        <p>Don't have an account yet? <span class="text-green-500 underline cursor-pointer" (click)="onSwitchMode()">Signup</span></p>
       </div>
       <div *ngIf="!isLoginMode" class="my-5">
         <p>Already have an account? <span class="text-green-500 underline cursor-pointer" (click)="onSwitchMode()">Login</span></p>
@@ -42,5 +47,5 @@
   <div *ngIf="isLoading" class="my-40 flex justify-center items-center">
     <app-loading-spinner></app-loading-spinner>
   </div>
-  
+
 </div>

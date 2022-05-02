@@ -55,8 +55,10 @@ export class AuthService {
   }
 
   autoLogin(){
+    // console.log('I want to auto login')
     const userData = localStorage.getItem('userData');
     if(!userData){
+      console.log('No valid user. Exiting auto login....')
       return
     }
     const userSnapShot: {
@@ -70,7 +72,8 @@ export class AuthService {
     if(loadedData.token){
       const tokenExpirationDuration = new Date(userSnapShot._tokenExpiration).getTime()-new Date().getTime();
       this.user.next(loadedData);
-      this.autoLogout(tokenExpirationDuration);
+      //this.autoLogout(tokenExpirationDuration);
+      console.log(tokenExpirationDuration);
     }
 
 
@@ -87,9 +90,10 @@ export class AuthService {
   }
 
   autoLogout(expirationTime: number){
+    console.log("Auto logging out from from authService!");
    this.tokenExpirationTimer = setTimeout(()=>{
       this.logout();
-    },expirationTime)
+    },expirationTime);
   }
   
   private handleError(errorRes: HttpErrorResponse){
@@ -120,13 +124,10 @@ export class AuthService {
 
   private handleAuthentication(email: string, userId: string, token: string, expiresIn: string){
     const expirationDate = new Date( new Date().getTime() + +expiresIn*1000 );
-    const user = new User(
-      email,
-      userId, 
-      token,
-      expirationDate);
+    const user = new User(email, userId, token, expirationDate);
     this.user.next(user);
-    this.autoLogout(+expiresIn*1000)
+    this.autoLogout(+expiresIn*1000);
+    console.log(+expiresIn*1000);
     localStorage.setItem('userData', JSON.stringify(user))
   }
 }
