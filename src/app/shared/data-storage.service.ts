@@ -14,7 +14,7 @@ export class DataStorageService {
     this.http.put('https://recipe-book-db-60812-default-rtdb.firebaseio.com/recipes.json', recipes)
               .subscribe(
                 response=>{
-                  console.log(response);
+                  //console.log(response);
                 }
               );
   }

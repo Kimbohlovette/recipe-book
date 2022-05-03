@@ -43,7 +43,7 @@ export class AuthComponent implements OnInit {
     authObs.subscribe(
       {
        next: responseData=>{
-        console.log(responseData);
+        //console.log(responseData);
         this.isLoading = false;
         this.router.navigate(['/recipes']);
 

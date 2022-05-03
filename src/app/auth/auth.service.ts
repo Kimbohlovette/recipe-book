@@ -55,25 +55,27 @@ export class AuthService {
   }
 
   autoLogin(){
-    // console.log('I want to auto login')
-    const userData = localStorage.getItem('userData');
+    
+    const userData = JSON.parse(localStorage.getItem('userData') as string);
+    //console.log(userData);
+    //console.log(new Date(userData._tokenExpirationDate).getTime())
     if(!userData){
-      console.log('No valid user. Exiting auto login....')
       return
     }
-    const userSnapShot: {
-      email: string,
-      id: string,
-      _token: string,
-      _tokenExpiration: string
-    } = JSON.parse(userData);
-    const loadedData = new User(userSnapShot.email, userSnapShot.id, userSnapShot._token, new Date(userSnapShot._tokenExpiration));
-    
+
+    const loadedData = new User(
+      userData.email,
+      userData.id,
+      userData._token,
+      new Date(userData._tokenExpirationDate)
+    )
     if(loadedData.token){
-      const tokenExpirationDuration = new Date(userSnapShot._tokenExpiration).getTime()-new Date().getTime();
       this.user.next(loadedData);
-      //this.autoLogout(tokenExpirationDuration);
-      console.log(tokenExpirationDuration);
+      //console.log(loadedData.token)
+      const expirationDuration = new Date(userData._tokenExpirationDate).getTime() - new Date().getTime();
+      //console.log(expirationDuration)
+      this.autoLogout(expirationDuration);
+      
     }
 
 
@@ -90,7 +92,7 @@ export class AuthService {
   }
 
   autoLogout(expirationTime: number){
-    console.log("Auto logging out from from authService!");
+    //console.log("Auto logging out from from authService!");
    this.tokenExpirationTimer = setTimeout(()=>{
       this.logout();
     },expirationTime);
@@ -127,7 +129,7 @@ export class AuthService {
     const user = new User(email, userId, token, expirationDate);
     this.user.next(user);
     this.autoLogout(+expiresIn*1000);
-    console.log(+expiresIn*1000);
+    //console.log(+expiresIn*1000);
     localStorage.setItem('userData', JSON.stringify(user))
   }
 }
